@@ -1,0 +1,49 @@
+#set ($imageScaler = $sitevisionUtils.getImageScaler(200, 100))
+
+$errorMessage
+
+#foreach ($item in $articles)
+   #if ( $velocityCount > $numberOfNews )
+   	#break
+   #end
+
+   #set ($title 			= $propertyUtil.getString($item, 'SV.Title'))
+   #set ($published 		= $dateUtil.getCalendarAsString('d MMMM Y', $propertyUtil.getCalendar($item, 'publishDate')))
+	#set ($description	= $propertyUtil.getString($item, 'SV.Description'))
+   #set ($text 			= $propertyUtil.getString($item, 'SV.Content'))
+   #set ($image 			= $scriptUtil.getNonNull($propertyUtil.getNode($item, 'SV.Image')))
+
+   <article class="env-news-item">
+      #if($image)
+         <div class="env-news-item__media">
+            $imageRenderer.setImageScaler($imageScaler)
+            $imageRenderer.clearSourceSetMode()
+            $imageRenderer.update($image)
+            $imageRenderer.render()
+         </div>
+      #end
+      <header class="env-news-item__headline">
+         <div class="env-news-item__headline__title">
+            <h2 class="env-text">
+               $linkRenderer.update($item)
+               $linkRenderer.render()
+            </h2>
+            <p class="env-text env-text--muted">$published</p>
+         </div>
+      </header>
+      <section class="env-news-item">
+         #if( $description.length() > 100)
+         	$description.substring(0, 100)...
+         #else
+         	$description
+         #end
+         <p class="env-text">
+            #if( $text.length() > 300)
+            	$text.substring(0, 300)...
+            #else
+            	$text
+            #end
+         </p>
+      </section>
+   </article>
+#end

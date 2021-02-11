@@ -1,0 +1,82 @@
+## ==================================================
+## Copyright (C) SiteVision 2011, all rights reserved
+## This portlet uses the SiteVision Public API
+## ==================================================
+#set ($propertyUtil = $sitevisionUtils.propertyUtil)
+#set ($nodeTreeUtil = $sitevisionUtils.nodeTreeUtil)
+#if ($propertyUtil.getNode($portlet, 'menuRoot'))
+   #set ($rootNode = $propertyUtil.getNode($portlet, 'menuRoot'))
+   #set ($pages = $sitevisionUtils.nodeIteratorUtil.getMenuItems($rootNode))
+   #if ($pages.hasNext())
+      #set ($linkRenderer = $sitevisionUtils.linkRenderer)
+      #if (!$propertyUtil.getBoolean($portlet, 'useIcons'))
+         $linkRenderer.clearUseLinkDecorationSettings()
+         $linkRenderer.clearUseResourceDecorationSettings()
+      #end
+      #if ($propertyUtil.getBoolean($portlet, 'useImage'))
+         #set ($useImage = true)
+         #set ($imageURL = $propertyUtil.getNestedString($portlet, 'image', 'URI'))
+         #set ($imageWidth = $propertyUtil.getNestedInt($portlet, 'image', 'width'))
+         #set ($imagePadding = $imageWidth + 2)
+         $linkRenderer.setStyle("display:block; padding-left:${imagePadding}px")
+      #else
+         #set ($useImage = false)
+         $linkRenderer.setStyle("display:block")
+      #end
+      #set ($fontClass = $propertyUtil.getNestedString($portlet, 'normalFont', 'selectorText'))
+      #set ($activeFontClass = $propertyUtil.getNestedString($portlet, 'activeFont', 'selectorText', $fontClass))
+      #set ($currentPage = $sitevisionUtils.portletContextUtil.currentPage)
+
+      ## ---------------------------------------------------
+      ## Adjust $space to increase/decrease spacing between menu items
+      ## Adjust $imageTop to increase/decrease image top alignment
+      ## ---------------------------------------------------
+      #set ($space = "0.15em")
+      #set ($imageTop = "0.15em")
+
+      <ul class="men-submenu sv-defaultlist">
+      #foreach ($p in $pages)
+       	
+         #if ($linkRenderer.isValidTarget($p))
+            $linkRenderer.update($p)
+            #if ($p.equals($currentPage))
+               $linkRenderer.setFontClass('active')
+            #else
+               $linkRenderer.setFontClass($fontClass)
+            #end
+            #if ($useImage)
+               <li style="background-image:url($imageURL); background-repeat:no-repeat; background-position:0 ${imageTop}; padding:${space} 0 ${space} 0">
+            #else
+               <li class="sv-inline">
+            #end
+            $linkRenderer.render()
+                  
+               ##sub
+               #if($nodeTreeUtil.isDescendantOf($currentPage, $p))
+               	#set ($subpages = $sitevisionUtils.nodeIteratorUtil.getMenuItems($p))
+                  #if ($subpages.hasNext())
+                  <ul>
+                     #foreach ($subpage in $subpages)
+                        #if ($linkRenderer.isValidTarget($subpage))
+                           $linkRenderer.update($subpage)
+                           #if ($subpage.equals($currentPage))
+                              $linkRenderer.setFontClass('active')
+                           #else
+                              $linkRenderer.setFontClass($fontClass)
+                           #end
+                           <li class="men-submenu__child sv-inline">
+                              $linkRenderer.render()
+                           </li>
+                        #end
+                     #end
+                  </ul>
+                  #end
+         		#end
+               ##sub
+                  
+         		</li>
+         #end
+      #end
+      </ul>
+   #end
+#end

@@ -1,0 +1,40 @@
+.sv-defaultFormTheme *{
+    font-family: "avenir lt std",sans-serif!important;
+  }
+  
+  .sv-defaultFormTheme input[type=text], .sv-defaultFormTheme input[type=email], .sv-defaultFormTheme input[type=url], .sv-defaultFormTheme input[type=tel], .sv-defaultFormTheme input[type=number], .sv-defaultFormTheme textarea, .sv-defaultFormTheme select{
+    border: 1px solid #000;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 1rem;
+    padding: 22px;
+    width: 100%;
+    font-weight: normal;
+    
+  }  
+  
+  .sv-defaultFormTheme label{
+    font-size: 1.125rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 1em;
+  }
+  
+  .sv-defaultFormTheme .c164{
+    margin-right:2em;
+  }
+  
+  .sv-defaultFormTheme input[type=button], .sv-defaultFormTheme input[type=submit], .sv-defaultFormTheme input[type=reset]{
+    position: relative;
+    border: 2px solid #ed1b34;
+    color: #fff!important;
+    background: #ed1b34;
+    display: inline-block;
+    padding: 10px;
+    border-radius: .25rem;
+  }
+  .sv-defaultFormTheme select, .sv-defaultFormTheme select option{
+      text-indent: 16px;
+      height: 42px;
+  }
+  
